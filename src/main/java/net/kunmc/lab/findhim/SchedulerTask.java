@@ -10,6 +10,7 @@ public class SchedulerTask extends BukkitRunnable {
         if(!FindHim.running){
             this.cancel();
             GameManager.forPlayers(GameManager.modeGameSet);
+            FindHim.stop();
             return;
         }
 
@@ -37,6 +38,7 @@ public class SchedulerTask extends BukkitRunnable {
                 GameManager.kaisuued = 0;
                 this.cancel();
                 GameManager.forPlayers(GameManager.modeGameSet);
+                FindHim.stop();
             }
         }
         else
@@ -50,6 +52,7 @@ public class SchedulerTask extends BukkitRunnable {
             if (GameManager.time <= 0) {
                 this.cancel();
                 GameManager.forPlayers(GameManager.modeGameSet);
+                FindHim.stop();
             }
         }
     }
