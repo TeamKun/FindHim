@@ -172,7 +172,7 @@ public class GameManager {
                 player.sendTitle("end", ""+time, 5, 20, 8);
                 player.setGameMode(GameMode.SURVIVAL);
                 player.sendRawMessage("あなたはサバイバルモードになりました.");
-                FindHim.stop();
+                //FindHim.stop();
                 break;
         }
 
