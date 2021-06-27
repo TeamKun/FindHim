@@ -68,7 +68,7 @@ public class GameManager {
             EntityType.ZOMBIE_HORSE,
             EntityType.ZOMBIE_VILLAGER
     );
-    private int fPlayerNum = 0;
+   
     private static int tPlayerNum = 0;
     public static Player wanted;
     public static int intT = 40;
@@ -81,7 +81,6 @@ public class GameManager {
 
     //mode用の定数
     final static int modeCountDown0 = 100;
-    //final static int modeCountDown = 0;
     final static int modeShowWanted = 1;
     final static int modeGamePlaying = 2;
     final static int modeCaptureWanted = 3;
@@ -150,28 +149,24 @@ public class GameManager {
             case modeGamePlaying:
                 player.playSound(player.getLocation(), Sound.BLOCK_BELL_USE, 2f, 0.5f);
                 player.sendTitle("" , ""+time, 5, 20, 8);
-                System.out.println("xxx");
                 if (TeamSetUp.teamTarget.hasEntry(player.getName())) {
-                    System.out.println("yyy");
                     switch (escapeMode){
                         case 0:
-                            break;//running
+                            break;//running away
                         case 1:
-                            System.out.println("111");
                             player.teleport(new Location(player.getWorld(), wanted.getLocation().getX(),wanted.getLocation().getY(),wanted.getLocation().getZ()));
-                            break;
+                            break;//tp to target everytime
                         case 2:
-                            System.out.println("222");
                             Location loc = player.getLocation();
                             Collections.shuffle(entities);
                             loc.getWorld().spawnEntity(loc, entities.get(0));
                             System.out.println("333");
-                            break;
+                            break;//random mob spawn
                     }
                 }
                 break;
             case modeCaptureWanted:
-                player.sendTitle(ChatColor.BLUE + TouchEventListener.finder.getName() + "が見つけた!", "終了", 5, 60, 8);
+                player.sendTitle(ChatColor.BLUE + TouchEventListener.finder.getName() + "が見つけた!", "終了", 5, 20, 8);
                 break;
             case modeGameSet:
                 player.sendTitle("end", ""+time, 5, 20, 8);
