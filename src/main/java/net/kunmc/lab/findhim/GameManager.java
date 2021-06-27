@@ -109,6 +109,14 @@ public class GameManager {
     }
 
     public static void gameManager() {
+         if(fPlayers.size()==0) {
+            FindHim.plugin.getServer().broadcastMessage("Finderがいません");
+            forPlayers(modeGameSet);
+        }
+        if(tPlayers.size()==0) {
+            FindHim.plugin.getServer().broadcastMessage("Targetがいません");
+            forPlayers(modeGameSet);
+        }
         playing = false;
         i = 5;
         if(kaisuued==0)
