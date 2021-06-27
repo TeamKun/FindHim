@@ -111,10 +111,12 @@ public class GameManager {
          if(fPlayers.size()==0) {
             FindHim.plugin.getServer().broadcastMessage("Finderがいません");
             forPlayers(modeGameSet);
+            FindHim.stop();
         }
         if(tPlayers.size()==0) {
             FindHim.plugin.getServer().broadcastMessage("Targetがいません");
             forPlayers(modeGameSet);
+            FindHim.stop();
         }
         playing = false;
         i = 5;
