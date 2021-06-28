@@ -97,12 +97,12 @@ public class GameManager {
             if (TeamSetUp.teamFinder.hasEntry(player.getName())) {
                 player.setGameMode(GameMode.CREATIVE);
                 player.sendRawMessage("あなたはクリエイティブモードになりました！！");
-                fPlayers.add(player);
+                if(kaisuued==0)fPlayers.add(player);
             } else if (TeamSetUp.teamTarget.hasEntry(player.getName())) {
                 player.setGameMode(GameMode.SURVIVAL);
                 player.sendRawMessage("あなたはサバイバルモードになりました！！");
-                tPlayers.add(player);
-                tPlayerNum++;
+                if(kaisuued==0){tPlayers.add(player);
+                tPlayerNum++;}
             }
         }
     }
@@ -111,10 +111,12 @@ public class GameManager {
          if(fPlayers.size()==0) {
             FindHim.plugin.getServer().broadcastMessage("Finderがいません");
             forPlayers(modeGameSet);
+            FindHim.stop();
         }
         if(tPlayers.size()==0) {
             FindHim.plugin.getServer().broadcastMessage("Targetがいません");
             forPlayers(modeGameSet);
+            FindHim.stop();
         }
         playing = false;
         i = 5;
@@ -166,6 +168,7 @@ public class GameManager {
                 }
                 break;
             case modeCaptureWanted:
+                player.setGameMode(GameMode.SPECTATOR);
                 player.sendTitle(ChatColor.BLUE + TouchEventListener.finder.getName() + "が見つけた!", "終了", 5, 20, 8);
                 break;
             case modeGameSet:

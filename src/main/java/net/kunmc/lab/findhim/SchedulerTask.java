@@ -1,5 +1,6 @@
 package net.kunmc.lab.findhim;
 
+import org.bukkit.GameMode;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class SchedulerTask extends BukkitRunnable {
@@ -30,8 +31,10 @@ public class SchedulerTask extends BukkitRunnable {
         if(TouchEventListener.captured){
             if(GameManager.time>GameManager.intT){
                 GameManager.forPlayers(GameManager.modeCaptureWanted);
+                GameManager.wanted.setGameMode(GameMode.SURVIVAL);
             }else if(GameManager.kaisuued<GameManager.kaisuu) {
                 TouchEventListener.captured = false;
+                GameManager.setGameMode();
                 GameManager.gameManager();
             }else {
                 TouchEventListener.captured = false;
