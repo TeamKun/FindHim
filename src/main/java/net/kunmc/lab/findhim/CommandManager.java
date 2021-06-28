@@ -110,7 +110,7 @@ public class CommandManager implements CommandExecutor,TabCompleter {
             }
         }
 
-        // ratio
+        // 
         if (args.length == 3 && same(args[0], "start")) {
             if (args[2].length() == 0) {
                 return Collections.singletonList("3");
