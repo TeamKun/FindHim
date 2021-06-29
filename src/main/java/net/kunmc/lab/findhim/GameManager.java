@@ -146,7 +146,7 @@ public class GameManager {
                 break;
             case modeShowWanted:
                 player.playSound(player.getLocation(), Sound.BLOCK_BELL_USE, 2f, 0.5f);
-                player.sendTitle(ChatColor.RED + wanted.getName() + "をさがせ!", escapeMode+" "+time, 5, 20, 8);
+                player.sendTitle(ChatColor.RED + wanted.getName() + "をさがせ!", " "+time, 5, 20, 8);
                 break;
             case modeGamePlaying:
                 player.playSound(player.getLocation(), Sound.BLOCK_BELL_USE, 2f, 0.5f);
@@ -159,10 +159,9 @@ public class GameManager {
                             player.teleport(new Location(player.getWorld(), wanted.getLocation().getX(),wanted.getLocation().getY(),wanted.getLocation().getZ()));
                             break;//tp to target everytime
                         case 2:
-                            Location loc = player.getLocation();
+                            /*Location loc = player.getLocation();
                             Collections.shuffle(entities);
-                            loc.getWorld().spawnEntity(loc, entities.get(0));
-                            System.out.println("333");
+                            loc.getWorld().spawnEntity(loc, entities.get(0));*/
                             break;//random mob spawn
                     }
                 }
