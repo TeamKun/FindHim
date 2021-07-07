@@ -5,8 +5,8 @@ import org.bukkit.scoreboard.Team;
 
 public class TeamSetUp {
 
-    private static final String TEAM_FINDER_NAME = "Finder";
-    private static final String TEAM_TARGET_NAME = "Target";
+    private static final String TEAM_FINDER_NAME = "Seek";
+    private static final String TEAM_TARGET_NAME = "Escape";
     public static Team teamFinder;
     public static Team teamTarget;
 
@@ -14,11 +14,11 @@ public class TeamSetUp {
         teamFinder = FindHim.board.getTeam(TEAM_FINDER_NAME);
         if(teamFinder == null) {
             teamFinder = FindHim.board.registerNewTeam(TEAM_FINDER_NAME);
-            teamFinder.setPrefix(ChatColor.BLUE+"[Finder]");
+            teamFinder.setPrefix(ChatColor.BLUE+"[Seek]");
             teamFinder.setSuffix(ChatColor.RESET.toString());
-            teamFinder.setDisplayName("Finder");
+            teamFinder.setDisplayName("Seek");
             teamFinder.setAllowFriendlyFire(false);
-            teamFinder.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.ALWAYS);
+            //teamFinder.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.FOR_OTHER_TEAMS);
         }
     }
 
@@ -26,11 +26,11 @@ public class TeamSetUp {
         teamTarget = FindHim.board.getTeam(TEAM_TARGET_NAME);
         if(teamTarget == null) {
             teamTarget = FindHim.board.registerNewTeam(TEAM_TARGET_NAME);
-            teamTarget.setPrefix(ChatColor.RED + "[Target]");
+            teamTarget.setPrefix(ChatColor.RED + "Escape");
             teamTarget.setSuffix(ChatColor.RESET.toString());
-            teamTarget.setDisplayName("Target");
+            teamTarget.setDisplayName("Escape");
             teamTarget.setAllowFriendlyFire(false);
-            teamTarget.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.ALWAYS);
+            teamTarget.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.NEVER);
         }
     }
 }

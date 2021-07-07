@@ -45,8 +45,8 @@ public class CommandManager implements CommandExecutor,TabCompleter {
             if (same(args[0], "start")) {
                 GameManager.time = 40;
                 GameManager.kaisuu = 3;
-                FindHim.plugin.start();
                 sender.sendMessage("[FindHim] Plugin is started.");
+                FindHim.plugin.start();
                 return true;
             }
 
@@ -63,8 +63,8 @@ public class CommandManager implements CommandExecutor,TabCompleter {
             if(GameManager.setTime(args[1])){
                 sender.sendMessage(String.format("time が %s に設定されました。", args[1]));
                 GameManager.kaisuu = 3;
-                FindHim.plugin.start();
                 sender.sendMessage("[FindHim] Plugin is started.");
+                FindHim.plugin.start();
                 return true;
             }
             sender.sendMessage(" 不正な引数です。");
@@ -81,8 +81,8 @@ public class CommandManager implements CommandExecutor,TabCompleter {
 
             if(GameManager.setKaisuu(args[2])){
                 sender.sendMessage(String.format("回数 が %s に設定されました。", args[2]));
-                FindHim.plugin.start();
                 sender.sendMessage("[FindHim] Plugin is started.");
+                FindHim.plugin.start();
                 return true;
             }else{
                 sender.sendMessage(" 不正な引数です。");

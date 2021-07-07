@@ -28,23 +28,22 @@ public class SchedulerTask extends BukkitRunnable {
 
         //スタート後
         GameManager.time--;
-        if(TouchEventListener.captured){
-            if(GameManager.time>GameManager.intT){
+        if(TouchEventListener.captured){                   /*■wantedが捕まった時*/
+            if(GameManager.time>GameManager.intT){                  //●TouchEventListenerで秒数が追加された後の5秒間
                 GameManager.forPlayers(GameManager.modeCaptureWanted);
-                GameManager.wanted.setGameMode(GameMode.SURVIVAL);
-            }else if(GameManager.kaisuued<GameManager.kaisuu) {
+                //GameManager.wanted.setGameMode(GameMode.SURVIVAL);
+            }else if(GameManager.kaisuued<GameManager.kaisuu) {     //●規定の回数に達していなければ
                 TouchEventListener.captured = false;
-                GameManager.setGameMode();
+                GameManager.setGameMode();                                  //▲ゲーム続行
                 GameManager.gameManager();
-            }else {
+            }else {                                                 //●規定の回数に達したら
                 TouchEventListener.captured = false;
-                GameManager.kaisuued = 0;
                 this.cancel();
-                GameManager.forPlayers(GameManager.modeGameSet);
+                GameManager.forPlayers(GameManager.modeGameSet);            //▲ゲームセット
                 FindHim.stop();
             }
         }
-        else
+        else                                                /*捕まっていない時*/
         {
             if (GameManager.time >= GameManager.intT-5) {
                 GameManager.forPlayers(GameManager.modeShowWanted);
@@ -54,7 +53,7 @@ public class SchedulerTask extends BukkitRunnable {
             }
             if (GameManager.time <= 0) {
                 this.cancel();
-                GameManager.forPlayers(GameManager.modeGameSet);
+                GameManager.forPlayers(GameManager.modeGameOver);
                 FindHim.stop();
             }
         }
