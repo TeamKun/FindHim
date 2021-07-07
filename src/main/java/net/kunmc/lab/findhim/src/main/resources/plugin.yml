@@ -1,0 +1,16 @@
+name: FindHim
+version: ${project.version}
+main: net.kunmc.lab.findhim.FindHim
+api-version: 1.16
+authors: [ fooaaa6 ]
+description: アイツをさがせ
+
+commands:
+  findhim:
+    description: FindHim Plugin On
+    permission: op
+    usage: |-
+      /findhim start
+      /findhim start <int time>
+      /findhim start <int time> <int kaisuu>
+
