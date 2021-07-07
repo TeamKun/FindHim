@@ -117,7 +117,6 @@ public class GameManager{
                 }
                 break;
             case modeCaptureWanted:
-                player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY,100,5));
                 player.sendTitle(ChatColor.BLUE + TouchEventListener.finder.getName() + ChatColor.WHITE+"が見つけた!", "", 5, 20, 8);
                 {//花火　コピペ
                     loc = new Location(player.getWorld(), wanted.getLocation().getX(),wanted.getLocation().getY(),wanted.getLocation().getZ());
@@ -129,14 +128,19 @@ public class GameManager{
                     meta.setPower(1);
                     firework.setFireworkMeta(meta);
                 }
+                if(player != wanted) {
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 100, 5));
+                }
                 break;
             case modeGameSet:
+                player.removePotionEffect(PotionEffectType.INVISIBILITY);
                 player.sendTitle("end", "クリア回数: "+(kaisuued-1), 5, 100, 8);
                 player.setGameMode(GameMode.SURVIVAL);
                 player.sendRawMessage("あなたはサバイバルモードになりました.");
                 //FindHim.stop();
                 break;
             case modeGameOver:
+                player.removePotionEffect(PotionEffectType.INVISIBILITY);
                 player.sendTitle("GAME OVER", "クリア回数: "+(kaisuued-1), 5, 100, 8);
                 player.setGameMode(GameMode.SURVIVAL);
                 player.sendRawMessage("あなたはサバイバルモードになりました.");
