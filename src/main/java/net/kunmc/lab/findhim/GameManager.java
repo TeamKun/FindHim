@@ -3,6 +3,7 @@ package net.kunmc.lab.findhim;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.FireworkMeta;
@@ -10,6 +11,9 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 
 public class GameManager{
@@ -26,7 +30,10 @@ public class GameManager{
     public static int time;
     public static int kaisuu;
     public static  int kaisuued = 0;
+    public static int clear = 0;
+    public static int mobSpawnInterval = 5;
     public static boolean playing = false;
+    public static boolean chaos = false;
     public static int i;
 
     //mode用の定数
@@ -37,10 +44,62 @@ public class GameManager{
     final static int modeGameSet = 4;
     final static int modeGameOver = 5;
 
+    static List<EntityType> entities = Arrays.asList(
+            EntityType.BAT,
+            EntityType.BEE,
+            EntityType.BLAZE,
+            EntityType.CAT,
+            EntityType.CAVE_SPIDER,
+            EntityType.CHICKEN,
+            EntityType.COD,
+            EntityType.COW,
+            EntityType.DOLPHIN,
+            EntityType.DONKEY,
+            EntityType.DROWNED,
+            EntityType.ELDER_GUARDIAN,
+            EntityType.ENDERMAN,
+            EntityType.ENDERMITE,
+            EntityType.EVOKER,
+            EntityType.FOX,
+            EntityType.GIANT,
+            EntityType.GHAST,
+            EntityType.GUARDIAN,
+            EntityType.HUSK,
+            EntityType.LLAMA,
+            EntityType.MAGMA_CUBE,
+            EntityType.MULE,
+            EntityType.MUSHROOM_COW,
+            EntityType.OCELOT,
+            EntityType.PANDA,
+            EntityType.PARROT,
+            EntityType.PHANTOM,
+            EntityType.PIG,
+            //EntityType.PIG_ZOMBIE,
+            EntityType.POLAR_BEAR,
+            EntityType.PUFFERFISH,
+            EntityType.RABBIT,
+            EntityType.SHEEP,
+            EntityType.SHULKER,
+            EntityType.SILVERFISH,
+            EntityType.SKELETON,
+            EntityType.SLIME,
+            EntityType.SPIDER,
+            EntityType.SQUID,
+            EntityType.STRAY,
+            EntityType.VILLAGER,
+            EntityType.WITCH,
+            EntityType.WITHER,
+            EntityType.WITHER_SKELETON,
+            EntityType.WOLF,
+            EntityType.ZOMBIE,
+            EntityType.ZOMBIE_HORSE,
+            EntityType.ZOMBIE_VILLAGER
+    );
+
     //ゲームモード設定
     public static void setGameMode() {
-        fPlayers.clear();
-        tPlayers.clear();
+        //fPlayers.clear();
+        //tPlayers.clear();
         tPlayerNum=0;
         for (Player player : plugin.getServer().getOnlinePlayers()) {
             if (!player.isOnline()) continue;
@@ -48,15 +107,17 @@ public class GameManager{
             if (TeamSetUp.teamFinder.hasEntry(player.getName())) {
                 player.setGameMode(GameMode.CREATIVE);
                 player.sendRawMessage("あなたはクリエイティブモードになりました！！");
-                //if(kaisuued==0)
-                    fPlayers.add(player);
+                fPlayers.add(player);
             } else if (TeamSetUp.teamTarget.hasEntry(player.getName())) {
-                player.setGameMode(GameMode.SURVIVAL);
-                player.sendRawMessage("あなたはサバイバルモードになりました！！");
-                //if(kaisuued==0){
-                    tPlayers.add(player);
-                    tPlayerNum++;
-                //}
+                if(chaos){
+                    player.setGameMode(GameMode.CREATIVE);
+                    player.sendRawMessage("あなたはクリエイティブモードになりました！！");
+                }else {
+                    player.setGameMode(GameMode.SURVIVAL);
+                    player.sendRawMessage("あなたはサバイバルモードになりました！！");
+                }
+                tPlayers.add(player);
+                tPlayerNum++;
             }
         }
     }
@@ -107,6 +168,17 @@ public class GameManager{
                 if (TeamSetUp.teamTarget.hasEntry(player.getName())) {
                     player.spawnParticle(Particle.CLOUD,(new Location(player.getWorld(), wanted.getLocation().getX(),wanted.getLocation().getY(),wanted.getLocation().getZ())),10);
                 }
+
+                /*chaosモード ランダムmobスポーン*/
+                if(chaos) {
+                    if (TeamSetUp.teamTarget.hasEntry(player.getName())) {
+                        if (time % mobSpawnInterval == 0) {
+                            Location locMobSpawn = player.getLocation();
+                            Collections.shuffle(entities);
+                            locMobSpawn.getWorld().spawnEntity(locMobSpawn, entities.get(0));
+                        }
+                    }
+                }
                 break;
             case modeGamePlaying:
                 player.playSound(player.getLocation(), Sound.BLOCK_BELL_USE, 2f, 0.5f);
@@ -115,6 +187,18 @@ public class GameManager{
                 if (TeamSetUp.teamTarget.hasEntry(player.getName())) {
                     player.spawnParticle(Particle.CLOUD,(new Location(player.getWorld(), wanted.getLocation().getX(),wanted.getLocation().getY(),wanted.getLocation().getZ())),10);
                 }
+
+                /*chaosモード ランダムmobスポーン*/
+                if(chaos) {
+                    if (TeamSetUp.teamTarget.hasEntry(player.getName())) {
+                        if (time % mobSpawnInterval == 0) {
+                            Location locMobSpawn = player.getLocation();
+                            Collections.shuffle(entities);
+                            locMobSpawn.getWorld().spawnEntity(locMobSpawn, entities.get(0));
+                        }
+                    }
+                }
+
                 break;
             case modeCaptureWanted:
                 player.sendTitle(ChatColor.BLUE + TouchEventListener.finder.getName() + ChatColor.WHITE+"が見つけた!", "", 5, 20, 8);
@@ -134,14 +218,13 @@ public class GameManager{
                 break;
             case modeGameSet:
                 player.removePotionEffect(PotionEffectType.INVISIBILITY);
-                player.sendTitle("end", "クリア回数: "+(kaisuued-1), 5, 100, 8);
+                player.sendTitle("end", "クリア回数: "+(clear), 5, 100, 8);
                 player.setGameMode(GameMode.SURVIVAL);
                 player.sendRawMessage("あなたはサバイバルモードになりました.");
-                //FindHim.stop();
                 break;
             case modeGameOver:
                 player.removePotionEffect(PotionEffectType.INVISIBILITY);
-                player.sendTitle("GAME OVER", "クリア回数: "+(kaisuued-1), 5, 100, 8);
+                player.sendTitle("GAME OVER", "クリア回数: "+(clear), 5, 100, 8);
                 player.setGameMode(GameMode.SURVIVAL);
                 player.sendRawMessage("あなたはサバイバルモードになりました.");
                 break;
@@ -172,6 +255,19 @@ public class GameManager{
             int intK = Integer.parseInt(k);
             if (intK>0) {
                 kaisuu = intK;
+                return true;
+            }
+        } catch (Exception ignore) {
+            // do nothing
+        }
+        return false;
+    }
+
+    public static boolean setInterval(String i){
+        try {
+            int intI = Integer.parseInt(i);
+            if (intI>0) {
+                mobSpawnInterval = intI;
                 return true;
             }
         } catch (Exception ignore) {

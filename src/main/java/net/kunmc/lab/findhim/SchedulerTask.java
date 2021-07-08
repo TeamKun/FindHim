@@ -34,10 +34,12 @@ public class SchedulerTask extends BukkitRunnable {
                 //GameManager.wanted.setGameMode(GameMode.SURVIVAL);
             }else if(GameManager.kaisuued<GameManager.kaisuu) {     //●規定の回数に達していなければ
                 TouchEventListener.captured = false;
+                GameManager.clear++;
                 GameManager.setGameMode();                                  //▲ゲーム続行
                 GameManager.gameManager();
             }else {                                                 //●規定の回数に達したら
                 TouchEventListener.captured = false;
+                GameManager.clear++;
                 this.cancel();
                 GameManager.forPlayers(GameManager.modeGameSet);            //▲ゲームセット
                 FindHim.stop();

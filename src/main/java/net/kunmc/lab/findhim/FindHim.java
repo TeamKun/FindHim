@@ -52,8 +52,10 @@ public final class FindHim extends JavaPlugin {
 
     public static void stop() {
         GameManager.playing = false;
+        GameManager.chaos = false;
         running = false;
         GameManager.kaisuued = 0;
+        GameManager.clear = 0;
         TouchEventListener.captured = false;
         return;
     }

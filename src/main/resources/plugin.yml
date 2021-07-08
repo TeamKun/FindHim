@@ -10,7 +10,6 @@ commands:
     description: FindHim Plugin On
     permission: op
     usage: |-
-      /findhim start
-      /findhim start <int time>
       /findhim start <int time> <int kaisuu>
+      /findhim chaos <int time> <int kaisuu> <int mobSpawnInterval>
 
