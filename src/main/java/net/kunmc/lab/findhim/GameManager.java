@@ -98,8 +98,8 @@ public class GameManager{
 
     //ゲームモード設定
     public static void setGameMode() {
-        //fPlayers.clear();
-        //tPlayers.clear();
+        fPlayers.clear();
+        tPlayers.clear();
         tPlayerNum=0;
         for (Player player : plugin.getServer().getOnlinePlayers()) {
             if (!player.isOnline()) continue;
