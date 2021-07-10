@@ -26,7 +26,7 @@ public class TeamSetUp {
         teamTarget = FindHim.board.getTeam(TEAM_TARGET_NAME);
         if(teamTarget == null) {
             teamTarget = FindHim.board.registerNewTeam(TEAM_TARGET_NAME);
-            teamTarget.setPrefix(ChatColor.RED + "Escape");
+            teamTarget.setPrefix(ChatColor.RED + "[Escape]");
             teamTarget.setSuffix(ChatColor.RESET.toString());
             teamTarget.setDisplayName("Escape");
             teamTarget.setAllowFriendlyFire(false);
