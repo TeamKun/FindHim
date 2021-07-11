@@ -106,15 +106,18 @@ public class GameManager{
 
             if (TeamSetUp.teamFinder.hasEntry(player.getName())) {
                 player.setGameMode(GameMode.CREATIVE);
-                player.sendRawMessage("あなたはクリエイティブモードになりました！！");
+                player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("クリエイティブモードになりました"));
+                //player.sendRawMessage("あなたはクリエイティブモードになりました！！");
                 fPlayers.add(player);
             } else if (TeamSetUp.teamTarget.hasEntry(player.getName())) {
                 if(chaos){
                     player.setGameMode(GameMode.CREATIVE);
-                    player.sendRawMessage("あなたはクリエイティブモードになりました！！");
+                    player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("クリエイティブモードになりました"));
+                    //player.sendRawMessage("あなたはクリエイティブモードになりました！！");
                 }else {
                     player.setGameMode(GameMode.SURVIVAL);
-                    player.sendRawMessage("あなたはサバイバルモードになりました！！");
+                    player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("サバイバルモードになりました"));
+                    //player.sendRawMessage("あなたはサバイバルモードになりました！！");
                 }
                 tPlayers.add(player);
                 tPlayerNum++;
@@ -139,8 +142,10 @@ public class GameManager{
         }
         playing = false;
         i = 5;
-        if(kaisuued==1)
+        if(kaisuued==1) {
             FindHim.timer();
+            //time++;
+        }
         wanted = chooseWanted();
     }
 
@@ -156,17 +161,24 @@ public class GameManager{
 
     //各実行部分
     public static void doPlayer(Player player, int mode) {
+        if(TouchEventListener.captured){
+            player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, 2f, 0.5f);
+        }
+
         switch (mode) {
             case modeCountDown0:
                 player.removePotionEffect(PotionEffectType.INVISIBILITY);
+                player.removePotionEffect(PotionEffectType.GLOWING);
                 player.playSound(player.getLocation(), Sound.BLOCK_BELL_USE, 2f, 0.5f);
-                player.sendTitle("" , ""+i, 5, 20, 8);
+                player.sendTitle("" , ""+(i), 5, 20, 8);
                 break;
             case modeShowWanted:
                 player.playSound(player.getLocation(), Sound.BLOCK_BELL_USE, 2f, 0.5f);
-                player.sendTitle(ChatColor.RED + wanted.getName() + ChatColor.WHITE+"をさがせ!", "残り"+time+"秒", 5, 20, 8);
                 if (TeamSetUp.teamTarget.hasEntry(player.getName())) {
+                    player.sendTitle(ChatColor.RED + wanted.getName() + ChatColor.WHITE+"を隠せ!", ""/*"残り"+time+"秒"*/, 2, 60, 5);
                     player.spawnParticle(Particle.CLOUD,(new Location(player.getWorld(), wanted.getLocation().getX(),wanted.getLocation().getY(),wanted.getLocation().getZ())),10);
+                }else{
+                    player.sendTitle(ChatColor.RED + wanted.getName() + ChatColor.WHITE+"をさがせ!", ""/*"残り"+time+"秒"*/, 2, 60, 5);
                 }
 
                 /*chaosモード ランダムmobスポーン*/
@@ -182,10 +194,12 @@ public class GameManager{
                 break;
             case modeGamePlaying:
                 player.playSound(player.getLocation(), Sound.BLOCK_BELL_USE, 2f, 0.5f);
-                player.sendTitle("" , "残り"+time+"秒", 5, 20, 8);
-                player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.RED + wanted.getName() + ChatColor.WHITE+"をさがせ!"));
+                //player.sendTitle("" , "残り"+time+"秒", 5, 20, 8);
                 if (TeamSetUp.teamTarget.hasEntry(player.getName())) {
+                    player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.RED + wanted.getName() + ChatColor.WHITE+"を隠せ!    残り"+time+"秒"));
                     player.spawnParticle(Particle.CLOUD,(new Location(player.getWorld(), wanted.getLocation().getX(),wanted.getLocation().getY(),wanted.getLocation().getZ())),10);
+                }else{
+                    player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.RED + wanted.getName() + ChatColor.WHITE+"をさがせ!    残り"+time+"秒"));
                 }
 
                 /*chaosモード ランダムmobスポーン*/
@@ -201,32 +215,36 @@ public class GameManager{
 
                 break;
             case modeCaptureWanted:
-                player.sendTitle(ChatColor.BLUE + TouchEventListener.finder.getName() + ChatColor.WHITE+"が見つけた!", "", 5, 20, 8);
-                {//花火　コピペ
-                    loc = new Location(player.getWorld(), wanted.getLocation().getX(),wanted.getLocation().getY(),wanted.getLocation().getZ());
-                    Firework firework = loc.getWorld().spawn(loc, Firework.class);
-                    FireworkMeta meta=firework.getFireworkMeta();
-                    FireworkEffect.Builder effect=FireworkEffect.builder();
-                    effect.withColor(Color.YELLOW);
-                    meta.addEffect(effect.build());
-                    meta.setPower(1);
-                    firework.setFireworkMeta(meta);
-                }
-                if(player != wanted) {
+                player.sendTitle(ChatColor.BLUE + TouchEventListener.finder.getName() + ChatColor.WHITE+"が見つけた!", "", 5, 80, 8);
+                if(player == wanted) {
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 100, 5));
+                }else{
                     player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 100, 5));
                 }
                 break;
             case modeGameSet:
                 player.removePotionEffect(PotionEffectType.INVISIBILITY);
-                player.sendTitle("end", "クリア回数: "+(clear), 5, 100, 8);
+                player.removePotionEffect(PotionEffectType.GLOWING);
+                if (TeamSetUp.teamTarget.hasEntry(player.getName())) {
+                    player.sendTitle("終了", kaisuu+"回中 "+(clear)+"回捕まった!", 5, 60, 8);
+                }else{
+                    player.sendTitle("終了", kaisuu+"回中 "+(clear)+"回捕まえた!", 5, 60, 8);
+                }
                 player.setGameMode(GameMode.SURVIVAL);
-                player.sendRawMessage("あなたはサバイバルモードになりました.");
+                player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("サバイバルモードになりました"));
+                //player.sendRawMessage("あなたはサバイバルモードになりました.");
                 break;
             case modeGameOver:
-                player.removePotionEffect(PotionEffectType.INVISIBILITY);
-                player.sendTitle("GAME OVER", "クリア回数: "+(clear), 5, 100, 8);
-                player.setGameMode(GameMode.SURVIVAL);
-                player.sendRawMessage("あなたはサバイバルモードになりました.");
+                player.playSound(player.getLocation(), Sound.BLOCK_BELL_USE, 2f, 0.5f);
+                player.sendTitle(ChatColor.RED+wanted.getName()+"は逃げ切った！", "", 5, 60, 8);
+                if(player == wanted) {
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 100, 5));
+                }else{
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 100, 5));
+                }
+                break;
+            case 226:
+                player.playSound(player.getLocation(), Sound.ENTITY_SKELETON_HURT, 2f, 0.5f);
                 break;
         }
 

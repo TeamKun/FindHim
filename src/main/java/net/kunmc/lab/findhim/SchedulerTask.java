@@ -29,9 +29,11 @@ public class SchedulerTask extends BukkitRunnable {
         //スタート後
         GameManager.time--;
         if(TouchEventListener.captured){                   /*■wantedが捕まった時*/
-            if(GameManager.time>GameManager.intT){                  //●TouchEventListenerで秒数が追加された後の5秒間
+            if(GameManager.time==GameManager.intT+4){                  //●TouchEventListenerで秒数が追加された後
                 GameManager.forPlayers(GameManager.modeCaptureWanted);
-                //GameManager.wanted.setGameMode(GameMode.SURVIVAL);
+                GameManager.forPlayers(222);
+            }else if(GameManager.time>GameManager.intT){                  //●TouchEventListenerで秒数が追加された後の5秒間
+                GameManager.forPlayers(222);
             }else if(GameManager.kaisuued<GameManager.kaisuu) {     //●規定の回数に達していなければ
                 TouchEventListener.captured = false;
                 GameManager.clear++;
@@ -47,16 +49,34 @@ public class SchedulerTask extends BukkitRunnable {
         }
         else                                                /*捕まっていない時*/
         {
-            if (GameManager.time >= GameManager.intT-5) {
+            if(GameManager.time==GameManager.intT+4){
+                GameManager.forPlayers(GameManager.modeGameOver);
+                GameManager.forPlayers(226);
+            } else if(GameManager.time>GameManager.intT){
+                //TouchEventListener.captured = true;
+                GameManager.forPlayers(226);
+            }else if(GameManager.time==GameManager.intT){
+                TouchEventListener.captured = false;
+                if(GameManager.kaisuued<GameManager.kaisuu) {     //●規定の回数に達していなければ
+                    TouchEventListener.captured = false;
+                    GameManager.setGameMode();                                  //▲ゲーム続行
+                    GameManager.gameManager();
+                }else {                                                 //●規定の回数に達したら
+                    TouchEventListener.captured = false;
+                    this.cancel();
+                    GameManager.forPlayers(GameManager.modeGameSet);            //▲ゲームセット
+                    FindHim.stop();
+                }
+            } else if (GameManager.time == GameManager.intT-1) {
                 GameManager.forPlayers(GameManager.modeShowWanted);
-            }
-            if (GameManager.time <= GameManager.intT-6) {
+            }else if (GameManager.time <= GameManager.intT) {
                 GameManager.forPlayers(GameManager.modeGamePlaying);
             }
             if (GameManager.time <= 0) {
-                this.cancel();
-                GameManager.forPlayers(GameManager.modeGameOver);
-                FindHim.stop();
+                GameManager.time = GameManager.intT+5;
+                //if(GameManager.time>GameManager.intT){
+
+                //}else
             }
         }
     }
