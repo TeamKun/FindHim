@@ -230,7 +230,9 @@ public class GameManager{
                 }else{
                     player.sendTitle("終了", kaisuu+"回中 "+(clear)+"回捕まえた!", 5, 60, 8);
                 }
-                player.setGameMode(GameMode.SURVIVAL);
+
+
+                //player.setGameMode(GameMode.SURVIVAL);
                 player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("サバイバルモードになりました"));
                 //player.sendRawMessage("あなたはサバイバルモードになりました.");
                 break;
